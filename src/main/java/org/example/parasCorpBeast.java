@@ -168,6 +168,7 @@ public class parasCorpBeast extends AbstractScript {
         }
     }
     public static void updatePhaseVariables() {
+        // For pb devs:  This method just updates how many hits/damage done when weakening corp
         if (newExp > currentExp) {
             if (Equipment.stream().name("Dragon warhammer").findFirst().orElse(null) != null) {
                 dragonHammerHits ++;
@@ -183,6 +184,7 @@ public class parasCorpBeast extends AbstractScript {
         System.out.println("bandos damage = " + bandosDamage);
     }
     public static Phase getCurrentPhase() {
+        // For pb devs:  This method handles which phase of weakening/killing corp we are in
         if (dragonHammerHits < 3) {
             System.out.println("(getCurrentPhase) -- Phase 1");
             return Phase.Phase1;
@@ -198,6 +200,7 @@ public class parasCorpBeast extends AbstractScript {
         }
     }
     public static boolean missingFullGear() {
+        // For pb devs:  This one checks for all items on first start up / after a corp kill
         System.out.println("(missingFullGear) -- started this script.");
         Map<String, Integer> startingSupplies = new HashMap<>();
         startingSupplies.put("Prayer potion(4)", 2);
@@ -223,6 +226,7 @@ public class parasCorpBeast extends AbstractScript {
         return false;
     }
     public static int getTotalSips(String basePotionName) {
+        // For pb devs:  This feeds information to missingItems()
         System.out.println("(getTotalSips) -- started this script.");
         int totalSips = 0;
         for (int i = 1; i <= 4; i++) {
@@ -232,6 +236,7 @@ public class parasCorpBeast extends AbstractScript {
         return totalSips;
     }
     public static boolean missingItems() {
+        // For pb devs:  This one is checked each time the POH is visited after beginning a kill - checks for supplies, but not everything
         System.out.println("(missingItems) -- started this script.");
         Map<String, Integer> requiredSips = new HashMap<>();
         requiredSips.put("Prayer potion", 1); // 2 potions * 4 sips each
@@ -298,6 +303,7 @@ public class parasCorpBeast extends AbstractScript {
         Bank.close();
     }
     public static boolean areItemsEquipped(List<String> items) {
+        // For pb devs:  This one feeds information to checkEquippedGear()
         System.out.println("(areItemsEquipped) -- started this script.");
         return items.stream().allMatch(itemName -> {
             for (Equipment.Slot slot : Equipment.Slot.values()) {
@@ -312,6 +318,7 @@ public class parasCorpBeast extends AbstractScript {
         });
     }
     public static GearPhase checkEquippedGear() {
+        // For pb devs:  Handles which phase of gear we are in
         // Ensure the equipment tab is open
         if (!Equipment.INSTANCE.opened()) {
             if (!Equipment.INSTANCE.open()) {
@@ -349,6 +356,7 @@ public class parasCorpBeast extends AbstractScript {
         return GearPhase.Unknown;
     }
     public static void equipGear(String phase, Map<String, Pair<Equipment.Slot, String>> items) {
+        // For pb devs:  Equips correct phase of gear
         System.out.println("(" + phase + ") -- Equipping " + phase);
         for (Map.Entry<String, Pair<org.powbot.api.rt4.Equipment.Slot, String>> entry : items.entrySet()) {
             final Item ITEM = Inventory.stream().name(entry.getKey()).findFirst().orElse(null);
@@ -363,6 +371,7 @@ public class parasCorpBeast extends AbstractScript {
         }
     }
     public static void gearSetup(String phase) {
+        // For pb devs:  Sets the gear required for each phase, without redundant code
         Map<String, String> mainHandMap = Map.of(
                 "firstPhaseGear", spec1_MAIN_HAND,
                 "secondPhaseGear", spec2_MAIN_HAND,
@@ -400,6 +409,7 @@ public class parasCorpBeast extends AbstractScript {
         }
     }
     private static Map<String, Pair<Equipment.Slot, String>> generateGearMap(String mainHand, String head, String ring, String cape) {
+        // For pb devs:  Simplifies interactions with items
         Map<String, Pair<Equipment.Slot, String>> items = new HashMap<>();
         items.put(mainHand, new Pair<>(Equipment.Slot.MAIN_HAND, "Wield"));
         items.put(OFF_HAND, new Pair<>(Equipment.Slot.OFF_HAND, "Wield"));
@@ -421,6 +431,7 @@ public class parasCorpBeast extends AbstractScript {
         return boostedAttackLevel <= realAttackLevel;
     }
     public static void consumeItem(String itemName, int[] itemIds, String action, String message) {
+        // For pb devs:  Instead of 3 different methods for prayer potions, food, and combat potions....
         System.out.println("(" + message + ") -- " + message);
         Item item = (itemIds != null) ? Inventory.stream().id(itemIds).findFirst().orElse(null) : Inventory.stream().name(itemName).findFirst().orElse(null);
         Location location = getCurrentLocation();
@@ -435,6 +446,7 @@ public class parasCorpBeast extends AbstractScript {
         }
     }
     public static void grabItemFromGround(String itemName) {
+        // For pb devs:  Loot grabber when corp dies
         GroundItem groundItem = GroundItems.stream().within(15).name(itemName).nearest().first();
         if (groundItem.inViewport()) {
             int invCount = (int) GroundItems.stream().id(groundItem.id()).at(groundItem.tile()).count();
@@ -528,6 +540,7 @@ public class parasCorpBeast extends AbstractScript {
         }
     }
     public static void activatePrayer(Prayer.Effect prayerEffect) {
+        // For pb devs:  Instead of correctly handling a simple prayer multiple times, make it one line
         if (!Prayer.prayerActive(prayerEffect)) {
             prayer(prayerEffect, true);
             Condition.wait(() -> Prayer.prayerActive(prayerEffect), 100, 10);
@@ -645,6 +658,7 @@ public class parasCorpBeast extends AbstractScript {
         }
     }
     public static void StopScript() {
+        // For pb devs:  I am stumped here.  This shit just crashes the entire client instead of simply stopping the runtime.
         System.out.println("(StopScript) -- Stopping the script...");
         if (Game.loggedIn()) {
             System.out.println("(StopScript) -- logging out");
