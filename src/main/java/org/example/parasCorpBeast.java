@@ -88,27 +88,22 @@ public class parasCorpBeast extends AbstractScript {
     public static void teleportToGE() {
         System.out.println("(teleportToGE) -- Teleporting to GE");
         GameObject jewelleryBox = Objects.stream().name("Ornate Jewellery Box").first();
-
         // Check if the object is found and in viewport.
         if (jewelleryBox.valid() && jewelleryBox.inViewport()) {
             System.out.println("(teleportToGE) -- Found jewellery box, interacting with ornate jewellery box...");
             // Interact with the Ornate Jewellery Box.
             if (jewelleryBox.interact("Teleport Menu")) {
-
                 // Wait for the teleport menu to load.
                 Condition.wait(() -> Components.stream().widget(590).text("Grand Exchange").viewable().isNotEmpty(), 1000, 10);
-
                 // Now interact with the Grand Exchange option.
                 Component geComponent = Components.stream().widget(590).text("Grand Exchange").viewable().first();
                 if (geComponent.valid()) {
                     geComponent.click();
-
                     // Wait until the player is at the Grand Exchange
                     boolean arrivedAtGE = Condition.wait(() -> {
                         Location currentLocation = getCurrentLocation();
                         return currentLocation == Location.GRAND_EXCHANGE;
                     }, 1000, 10);
-
                     if (arrivedAtGE) {
                         System.out.println("(teleportToGE) -- Successfully teleported to the Grand Exchange.");
                     } else {
@@ -127,21 +122,17 @@ public class parasCorpBeast extends AbstractScript {
     public static void teleportToCorp() {
         System.out.println("(teleportToCorp) -- Teleporting to Corp");
         GameObject jewelleryBox = Objects.stream().name("Ornate Jewellery Box").first();
-
         // Check if the object is found and in viewport.
         if (jewelleryBox.valid() && jewelleryBox.inViewport()) {
             System.out.println("(teleportToCorp) -- Interacting with ornate jewellery box...");
             // Interact with the Ornate Jewellery Box.
             if (jewelleryBox.interact("Teleport Menu")) {
-
                 // Wait for the teleport menu to load.
                 Condition.wait(() -> Components.stream().widget(590).text("Corporeal Beast").viewable().isNotEmpty(), 1000, 10);
-
                 // Now interact with the Grand Exchange option.
                 Component corpBeastEntranceComponent = Components.stream().widget(590).text("Corporeal Beast").viewable().first();
                 if (corpBeastEntranceComponent.valid()) {
                     corpBeastEntranceComponent.click();
-
                     // Wait until the player is at the Grand Exchange
                     boolean arrivedAtCorpEntrance = Condition.wait(() -> {
                         Location currentLocation = getCurrentLocation();
@@ -246,7 +237,6 @@ public class parasCorpBeast extends AbstractScript {
         requiredSips.put("Prayer potion", 1); // 2 potions * 4 sips each
         requiredSips.put("Divine super combat potion", 1); // 2 potions * 4 sips each
         requiredSips.put("Anglerfish", 4);
-
         for (Map.Entry<String, Integer> entry : requiredSips.entrySet()) {
             // For potions, check total sips
             if (entry.getKey().contains("potion")) {
@@ -269,31 +259,25 @@ public class parasCorpBeast extends AbstractScript {
         requiredSupplies.put("Prayer potion(4)", 2);
         requiredSupplies.put("Divine super combat potion(4)", 2);
         requiredSupplies.put("Anglerfish", 13);
-
         if (!Bank.inViewport()) {
             Movement.moveTo(bankGE);
             System.out.println("(retrieveMissingItemsFromBank) -- Moving to Bank until in Viewport");
             Condition.wait(Bank::inViewport, 500, 10);
         }
-
         System.out.println("(retrieveMissingItemsFromBank) -- Opening Bank");
         if (!Bank.opened()) {
             Condition.wait(Bank::open, 1000, 15);
         }
-
         if (!Bank.opened()) {
             System.out.println("(retrieveMissingItemsFromBank) -- Failed to open bank!");
             return;
         }
-
         Bank.currentTab(9);
-
         // deposit all items that are not part of the required items and gear
         List<String> allRequired = new ArrayList<>(requiredItems);
         allRequired.addAll(requiredSupplies.keySet());
         System.out.println("(retrieveMissingItemsFromBank) -- Depositing all items not part of required items");
         Bank.depositAllExcept(allRequired.toArray(new String[0]));
-
         // retrieve gear items if they're missing from inventory and equipment
         for (String item : requiredItems) {
             if (Inventory.stream().name(item).findFirst().orElse(null) == null &&
@@ -336,21 +320,15 @@ public class parasCorpBeast extends AbstractScript {
             // Wait for equipment tab to be opened
             Condition.wait(Equipment.INSTANCE::opened, 300, 10);
         }
-
         // Define the items required for each phase
         List<String> phaseOneItems = Arrays.asList(spec1_HEAD, spec1_CAPE, spec1_MAIN_HAND, OFF_HAND,
-                spec1_RING, NECK, QUIVER, TORSO, LEGS,
-                HANDS, FEET);
+                spec1_RING, NECK, QUIVER, TORSO, LEGS, HANDS, FEET);
         List<String> phaseTwoItems = Arrays.asList(spec2_HEAD, spec1_CAPE, spec2_MAIN_HAND, OFF_HAND,
-                spec2_RING, NECK, QUIVER, TORSO, LEGS,
-                HANDS, FEET);
+                spec2_RING, NECK, QUIVER, TORSO, LEGS, HANDS, FEET);
         List<String> phaseThreeItems = Arrays.asList(spec3_HEAD, spec3_CAPE, spec3_MAIN_HAND,
-                spec3_RING, NECK, QUIVER, TORSO, LEGS,
-                HANDS, FEET);
+                spec3_RING, NECK, QUIVER, TORSO, LEGS, HANDS, FEET);
         List<String> phaseFourItems = Arrays.asList(spec3_HEAD, spec3_CAPE, spec4_MAIN_HAND,
-                spec3_RING, NECK, QUIVER, TORSO, LEGS,
-                HANDS, FEET);
-
+                spec3_RING, NECK, QUIVER, TORSO, LEGS, HANDS, FEET);
         if (areItemsEquipped(phaseOneItems)) {
             System.out.println("(checkEquippedGear) -- PhaseOneGear is equipped");
             return GearPhase.PhaseOneGear;
@@ -372,7 +350,6 @@ public class parasCorpBeast extends AbstractScript {
     }
     public static void equipGear(String phase, Map<String, Pair<Equipment.Slot, String>> items) {
         System.out.println("(" + phase + ") -- Equipping " + phase);
-
         for (Map.Entry<String, Pair<org.powbot.api.rt4.Equipment.Slot, String>> entry : items.entrySet()) {
             final Item ITEM = Inventory.stream().name(entry.getKey()).findFirst().orElse(null);
             if (ITEM != null) {
