@@ -227,7 +227,7 @@ public class parasCorpBeast extends AbstractScript {
                 return true;
             }
         }
-        parasCorpBeast.corpAlive = true;
+        corpAlive = true;
         System.out.println("(missingFullGear) -- Have all gear, setting Corp Beast to Alive");
         return false;
     }
@@ -482,7 +482,7 @@ public class parasCorpBeast extends AbstractScript {
         Phase phase = getCurrentPhase();
         System.out.println("currentHP (healthPercent) = " + currentHP);
         System.out.println("specialAttackPercent = " + specialAttackPercent);
-        if (!parasCorpBeast.corpAlive) {
+        if (!corpAlive) {
             grabItemFromGround(corpPet);
             grabItemFromGround(Arrays.toString(wantedItems));
             teleportToPOH();
