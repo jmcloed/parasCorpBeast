@@ -170,11 +170,11 @@ public class parasCorpBeast extends AbstractScript {
     public static void updatePhaseVariables() {
         // For pb devs:  This method just updates how many hits/damage done when weakening corp
         if (newExp > currentExp) {
-            if (Equipment.stream().name("Dragon warhammer").findFirst().orElse(null) != null) {
+            if (Equipment.stream().name(spec1_MAIN_HAND).findFirst().orElse(null) != null) {
                 dragonHammerHits ++;
-            } else if (Equipment.stream().name("Arclight").findFirst().orElse(null) != null) {
+            } else if (Equipment.stream().name(spec2_MAIN_HAND).findFirst().orElse(null) != null) {
                 arclightHits ++;
-            } else if (Equipment.stream().name("Bandos godsword").findFirst().orElse(null) != null) {
+            } else if (Equipment.stream().name(spec3_MAIN_HAND).findFirst().orElse(null) != null) {
                 double damageDone = (newExp - currentExp) / 6.33;
                 bandosDamage += (int) Math.floor(damageDone);
             }
